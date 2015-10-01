@@ -1,0 +1,15 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    </style>
+
+    <!--style name="AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar">
+        <item name="android:height">100dip</item>
+        <item name="android:divider"></item>
+        <item name="android:showDividers">beginning</item>
+        <item name="android:dividerPadding">10dp</item>
+    </style-->
+
+</resources>

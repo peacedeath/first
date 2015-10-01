@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">Блютуз проект</string>
+
+    <string name="hello_world"></string>
+    <string name="action_settings">Settings</string>
+    <string name="ButtName1">Соедениться</string>
+    <string name="ButtName2">Получить список\nсервисов</string>
+    <string name="ButtName3_on">Подключить ceрвис\nSerial Port</string>
+    <string name="ButtName3_off">Отключить ceрвис\nSerial Port</string>
+    <string name="ButtSendCmd">Отправить команду</string>
+    <string name="SpinnerPrompt">BT устройства</string>
+    <string name="menuBT_switch">Включить адаптер</string>
+    <string name="menuOverflow">Меню</string>
+
+    <string name="BT_SW">Bluetooth</string>
+    <string name="BT_DEVICES">Устройства</string>
+    <string name="EXIT">Выход</string>
+
+
+    <string-array name="my_string_array">
+        <item>00000000-0000-1000-8000-00805F9B34FB|BASE</item>
+        <item>00001000-0000-1000-8000-00805F9B34FB|Service Discovery Server Service ClassID</item>
+        <item>00001001-0000-1000-8000-00805F9B34FB|Browse Group Descriptor Service ClassID</item>
+        <item>00001101-0000-1000-8000-00805F9B34FB|SerialPort</item>
+        <item>00001102-0000-1000-8000-00805F9B34FB|LANAccessUsingPPP</item>
+        <item>00001103-0000-1000-8000-00805F9B34FB|DialupNetworking</item>
+        <item>00001104-0000-1000-8000-00805F9B34FB|IrMCSync</item>
+        <item>00001105-0000-1000-8000-00805F9B34FB|OBEXObjectPush</item>
+        <item>00001106-0000-1000-8000-00805F9B34FB|OBEXFileTransfer</item>
+        <item>00001107-0000-1000-8000-00805F9B34FB|IrMCSyncCommand</item>
+        <item>00001108-0000-1000-8000-00805F9B34FB|Headset</item>
+        <item>00001109-0000-1000-8000-00805F9B34FB|CordlessTelephony</item>
+        <item>0000110A-0000-1000-8000-00805F9B34FB|AudioSource</item>
+        <item>0000110B-0000-1000-8000-00805F9B34FB|AudioSink</item>
+        <item>0000110C-0000-1000-8000-00805F9B34FB|AV_RemoteControlTarget</item>
+        <item>0000110D-0000-1000-8000-00805F9B34FB|AdvancedAudioDistribution</item>
+        <item>0000110E-0000-1000-8000-00805F9B34FB|AV_RemoteControl</item>
+        <item>0000110F-0000-1000-8000-00805F9B34FB|AV_RemoteControlController</item>
+        <item>00001110-0000-1000-8000-00805F9B34FB|Intercom</item>
+        <item>00001111-0000-1000-8000-00805F9B34FB|Fax</item>
+        <item>00001112-0000-1000-8000-00805F9B34FB|Headset-Audio Gateway (AG)</item>
+        <item>00001113-0000-1000-8000-00805F9B34FB|WAP</item>
+        <item>00001114-0000-1000-8000-00805F9B34FB|WAP_CLIENT</item>
+        <item>00001115-0000-1000-8000-00805F9B34FB|PANU</item>
+        <item>00001116-0000-1000-8000-00805F9B34FB|NAP</item>
+        <item>00001117-0000-1000-8000-00805F9B34FB|GN</item>
+        <item>00001118-0000-1000-8000-00805F9B34FB|DirectPrinting</item>
+        <item>00001119-0000-1000-8000-00805F9B34FB|ReferencePrinting</item>
+        <item>0000111A-0000-1000-8000-00805F9B34FB|Basic Imaging Profile</item>
+        <item>0000111B-0000-1000-8000-00805F9B34FB|ImagingResponder</item>
+        <item>0000111C-0000-1000-8000-00805F9B34FB|ImagingAutomaticArchive</item>
+        <item>0000111D-0000-1000-8000-00805F9B34FB|ImagingReferencedObjects</item>
+        <item>0000111E-0000-1000-8000-00805F9B34FB|Handsfree</item>
+        <item>0000111F-0000-1000-8000-00805F9B34FB|HandsfreeAudioGateway</item>
+        <item>00001120-0000-1000-8000-00805F9B34FB|DirectPrintingReferenceObjectsService</item>
+        <item>00001121-0000-1000-8000-00805F9B34FB|ReflectedUI</item>
+        <item>00001122-0000-1000-8000-00805F9B34FB|BasicPrinting</item>
+        <item>00001123-0000-1000-8000-00805F9B34FB|PrintingStatus</item>
+        <item>00001124-0000-1000-8000-00805F9B34FB|HumanInterfaceDeviceService</item>
+        <item>00001125-0000-1000-8000-00805F9B34FB|HardcopyCableReplacement</item>
+        <item>00001126-0000-1000-8000-00805F9B34FB|HCR_Print</item>
+        <item>00001127-0000-1000-8000-00805F9B34FB|HCR_Scan</item>
+        <item>00001128-0000-1000-8000-00805F9B34FB|Common_ISDN_Access</item>
+        <item>0000112D-0000-1000-8000-00805F9B34FB|SIM_Access</item>
+        <item>0000112E-0000-1000-8000-00805F9B34FB|Phonebook Access-PCE</item>
+        <item>0000112F-0000-1000-8000-00805F9B34FB|Phonebook Access-PSE</item>
+        <item>00001130-0000-1000-8000-00805F9B34FB|Phonebook Access</item>
+        <item>00001131-0000-1000-8000-00805F9B34FB|Headset-HS</item>
+        <item>00001132-0000-1000-8000-00805F9B34FB|Message Access Server</item>
+        <item>00001133-0000-1000-8000-00805F9B34FB|Message Notification Server</item>
+        <item>00001134-0000-1000-8000-00805F9B34FB|Message Access Profile</item>
+        <item>00001135-0000-1000-8000-00805F9B34FB|GNSS</item>
+        <item>00001136-0000-1000-8000-00805F9B34FB|GNSS_Server</item>
+        <item>0000113A-0000-1000-8000-00805F9B34FB|MPS Profile UUID</item>
+        <item>0000113B-0000-1000-8000-00805F9B34FB|MPS SC UUID</item>
+        <item>00001137-0000-1000-8000-00805F9B34FB|3D Display</item>
+        <item>00001138-0000-1000-8000-00805F9B34FB|3D Glasses</item>
+        <item>00001139-0000-1000-8000-00805F9B34FB|3D Synchronization</item>
+        <item>0000113C-0000-1000-8000-00805F9B34FB|CTN Access Service</item>
+        <item>0000113D-0000-1000-8000-00805F9B34FB|CTN Notification Service</item>
+        <item>0000113E-0000-1000-8000-00805F9B34FB|CTN Profile</item>
+        <item>00001200-0000-1000-8000-00805F9B34FB|PnPInformation</item>
+        <item>00001201-0000-1000-8000-00805F9B34FB|GenericNetworking</item>
+        <item>00001202-0000-1000-8000-00805F9B34FB|GenericFileTransfer</item>
+        <item>00001203-0000-1000-8000-00805F9B34FB|GenericAudio</item>
+        <item>00001204-0000-1000-8000-00805F9B34FB|GenericTelephony</item>
+        <item>00001205-0000-1000-8000-00805F9B34FB|UPNP_Service</item>
+        <item>00001206-0000-1000-8000-00805F9B34FB|UPNP_IP_Service</item>
+        <item>00001300-0000-1000-8000-00805F9B34FB|ESDP_UPNP_IP_PAN</item>
+        <item>00001301-0000-1000-8000-00805F9B34FB|ESDP_UPNP_IP_LAP</item>
+        <item>00001302-0000-1000-8000-00805F9B34FB|ESDP_UPNP_L2CAP</item>
+        <item>00001303-0000-1000-8000-00805F9B34FB|VideoSource</item>
+        <item>00001304-0000-1000-8000-00805F9B34FB|VideoSink</item>
+        <item>00001305-0000-1000-8000-00805F9B34FB|VideoDistribution</item>
+        <item>00001400-0000-1000-8000-00805F9B34FB|HDP</item>
+        <item>00001401-0000-1000-8000-00805F9B34FB|HDP Source</item>
+        <item>00001402-0000-1000-8000-00805F9B34FB|HDP Sink</item>
+    </string-array>
+</resources>
