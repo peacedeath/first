@@ -1,8 +1,25 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <!--<item name="android:windowTitleSize">0dp</item>-->
+        <item name="windowActionBar">false</item>
+        <!--<item name="android:buttonStyle">@style/Widget.AppCompat.Button</item>-->
+        <!--<item name="buttonStyle">@style/Widget.AppCompat.Button</item>-->
+        <item name="buttonStyle">@android:style/Widget.Button</item>
+    </style>
 
+    <style name="spinner_style">
+        <item name="android:background">@drawable/gradient_spinner</item>
+        <item name="background">@drawable/gradient_spinner</item>
+        <!--<item name="android:layout_marginLeft">5dp</item>-->
+        <!--<item name="android:layout_marginRight">5dp</item>-->
+        <!--<item name="android:layout_marginBottom">5dp</item>-->
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:popupBackground">#DFFFFFFF</item>
     </style>
 
     <!--style name="AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar">

@@ -1,17 +1,17 @@
 package com.example.boss.first;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ParcelUuid;
 import android.os.PersistableBundle;
+import android.support.v4.view.WindowCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.Spannable;
@@ -22,10 +22,8 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,6 +38,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +47,7 @@ import java.util.UUID;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
 
-    private static final String TAG = "MyLog";
+    private static final String LOG_TAG = "MyLog";
     private static final int MESSAGE_READ = 1;
 
     private static final Map<UUID, String> btServices = new HashMap<UUID, String>();
@@ -73,31 +72,38 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private static ParcelUuid[] UUIDs;
     private ConnectedThread MyThread = null;
     private String cmd;
-    private android.support.v7.app.ActionBar actionBar;
-    private static Menu menu;
+//    private ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate!\n");
+        getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        Log.d(LOG_TAG, "onCreate!\n");
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= 11) {
+            requestFeature();
+        }
+        supportRequestWindowFeature(WindowCompat.FEATURE_ACTION_BAR);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowHomeEnabled(false); //не показываем иконку приложения
+        actionBar.setDisplayShowTitleEnabled(false); // и заголовок тоже прячем
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(R.layout.my_actionbar);
+
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) MapFromStringArray(R.array.my_string_array, btServices);
 //            for (Map.Entry<UUID, String> entry : btServices.entrySet()) {
-//                Log.d(TAG, "*** entry.key = " + entry.getKey() + " entry.value = " + entry.getValue());
+//                Log.d(LOG_TAG, "*** entry.key = " + entry.getKey() + " entry.value = " + entry.getValue());
 //            }
         tv1 = (TextView) findViewById(R.id.tv1);
-//        spDevices = (Spinner) findViewById(R.id.spDevices);
 
         btn1 = (Button) findViewById(R.id.connect);
         btn2 = (Button) findViewById(R.id.get_srv);
         btn3 = (Button) findViewById(R.id.btn3);
         btnSendCmd = (Button) findViewById(R.id.sendCmd);
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-        actionBar = getSupportActionBar();
-        actionBar.setCustomView(R.layout.my_actionbar);
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(false);
+
         spDevices = (Spinner) findViewById(R.id.sp_devices);
 
         btn1.setOnClickListener(this);
@@ -123,11 +129,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     tv1.scrollTo(0, tv1.getLineCount() * tv1.getLineHeight() - tv1.getHeight());    // Прокрутить скролл до высоты текста минус высота поля. Таким образом новый текст будет внизу поля, а не вверху.
             }
         });
+        ((ImageButton) findViewById(R.id.bt_sw)).setImageResource(btAdapter.isEnabled()?R.drawable.bt_icon_on_128:R.drawable.bt_icon_off_128);
 
-        btn3.setText(btSocket != null ? R.string.ButtName3_off : R.string.ButtName3_on);
-        //adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
-        //adapter.add(spData);
-        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnAdapter = new SimpleAdapter(this, spData, android.R.layout.simple_spinner_item, new String[]{"Name", "Address"}, new int[]{android.R.id.text1, android.R.id.text2});
         spnAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spDevices.setAdapter(spnAdapter);
@@ -135,9 +138,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         else spDevices.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(LOG_TAG, String.valueOf(parent.getSelectedItemPosition()));
                 Map<String, Object> m = (Map<String, Object>) parent.getSelectedItem();
                 MacAdress = m.get("Address").toString();
-//                    Log.d(TAG, "*** Выбрано устройство " + m.get("Name") + " MAC: " + MacAdress);
+                Log.d(LOG_TAG, "*** Выбрано устройство " + m.get("Name") + " MAC: " + MacAdress);
                 addText(tv1, "*** Пытаемся соединиться ***\n", Color.BLUE);
                 btDevice = btAdapter.getRemoteDevice(MacAdress);                                        // Получаем удаленное устройство по его MAC адресу
                 addText(tv1, "*** Соединились ***\n", Color.BLUE);
@@ -156,6 +160,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+               Log.d(LOG_TAG, String.valueOf(parent.getSelectedItemPosition()));
             }
         });
 
@@ -188,7 +193,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 public void handleMessage(android.os.Message msg) {
                     byte[] buff = (byte[])msg.obj;
                     String inpStr = new String(buff, 0, msg.what);
-                    Log.d(TAG, String.valueOf(msg.what));
+                    Log.d(LOG_TAG, String.valueOf(msg.what));
                     addText(tv1, inpStr, Color.MAGENTA);
                 }
             };
@@ -196,19 +201,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
     @Override
     public void onResume() {
-        Log.d(TAG, "onResume!\n");
+        Log.d(LOG_TAG, "onResume!\n");
         super.onResume();
     }
 
     @Override
     protected void onStop() {
-        Log.d(TAG, "onStop!\n");
+        Log.d(LOG_TAG, "onStop!\n");
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG, "onDestroy!\n");
+        Log.d(LOG_TAG, "onDestroy!\n");
         if (btAdapter != null && btAdapter.isEnabled()) {
             btAdapter.disable();
             btAdapter = null;
@@ -218,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     protected void onPause() {
-        Log.d(TAG, "onPause!\n");
+        Log.d(LOG_TAG, "onPause!\n");
         super.onPause();
 //        if (MyThread.status_OutStrem() != null) {
 //            MyThread.cancel();
@@ -227,14 +232,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 //        try {
 //            btSocket.close();
 //        } catch (IOException e) {
-//            Log.d(TAG, "Ошибка при закрытии сокета на onPause!", e);
+//            Log.d(LOG_TAG, "Ошибка при закрытии сокета на onPause!", e);
 //            tv1.append("\nОшибка при закрытии сокета на onPause!");
 //        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        Log.d(TAG, "onSaveInstanceState!\n");
+        Log.d(LOG_TAG, "onSaveInstanceState!\n");
         super.onSaveInstanceState(outState, outPersistentState);
         outState.putInt("spDevices", spDevices.getSelectedItemPosition());
         outState.putCharSequence("tv1", tv1.getText());
@@ -242,15 +247,15 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-        Log.d(TAG, "onRestoreInstanceState!\n");
+        Log.d(LOG_TAG, "onRestoreInstanceState!\n");
         super.onRestoreInstanceState(savedInstanceState, persistentState);
         spDevices.setSelection(savedInstanceState.getInt("spDevices"));
         tv1.setText(savedInstanceState.getCharSequence("tv1"));
     }
 
-    @Override
+/*    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu!\n");
+        Log.d(LOG_TAG, "onCreateOptionsMenu!\n");
         MainActivity.menu = menu;
 //        getMenuInflater().inflate(R.menu.menu_main, menu);
 //        final Spinner spinner = (Spinner) menu.findItem(R.id.sp_devices).getActionView();
@@ -278,14 +283,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        Log.d(TAG, "onPrepareOptionsMenu!\n");
+        Log.d(LOG_TAG, "onPrepareOptionsMenu!\n");
 //        menu.setGroupEnabled(R.id.bt_devices, btAdapter != null && btAdapter.isEnabled());
         return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d(TAG, "onOptionsItemSelected!\n");
+        Log.d(LOG_TAG, "onOptionsItemSelected!\n");
         switch (item.getItemId()){
             case R.id.bt_sw:
                 if (BT_SWITCH()) {
@@ -313,7 +318,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
         Toast.makeText(this, item.getTitle(), Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private void MyError(String message){
         Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
@@ -336,7 +341,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.connect:
-                Log.d(TAG, "***Пытаемся соединиться***");
+                Log.d(LOG_TAG, "***Пытаемся соединиться***");
                 btDevice = btAdapter.getRemoteDevice(MacAdress);                                        // Получаем удаленное устройство по его MAC адресу
                 addText(tv1, "***Получили device = " + btDevice.getName() + "***\n", Color.rgb(255, 0, 0));
                 UUIDs = btDevice.getUuids();
@@ -351,9 +356,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case R.id.get_srv:
                 if (UUIDs != null) {
                     tv1.append("Найдены следующие сервисы:\n");
-                    Log.d(TAG, "Найдены следующие сервисы:");
+                    Log.d(LOG_TAG, "Найдены следующие сервисы:");
                     for (ParcelUuid pu : UUIDs) {
-                        Log.d(TAG, pu.getUuid().toString() + " = " + btServices.get(pu.getUuid()));
+                        Log.d(LOG_TAG, pu.getUuid().toString() + " = " + btServices.get(pu.getUuid()));
                         tv1.append("\n" + btServices.get(pu.getUuid()) + " (" + pu.toString() + ")");
                     }
                 }
@@ -414,7 +419,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 dlgAlert.create().show();
                 break;
             case R.id.sp_devices:
+                Toast.makeText(getApplicationContext(), v.getContentDescription(), Toast.LENGTH_SHORT).show();
+                break;
             case R.id.bt_sw:
+                Toast.makeText(getApplicationContext(), v.getContentDescription(), Toast.LENGTH_SHORT).show();
                 if (BT_SWITCH()) {
                     ((ImageButton) v).setImageResource(R.drawable.bt_icon_on_128);
 //                    ((ImageButton) findViewById(R.id.bt_devices)).setEnabled(true);
@@ -457,7 +465,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                         m = new HashMap<String, Object>();
                         m.put("Name", device.getName());
                         m.put("Address", device.getAddress());
-//                        Log.d(TAG, m.toString());
+                        Log.d(LOG_TAG, m.toString());
                         spData.add(m);
 //                        addText(tv1, device.getName() + ", " + String.valueOf(spData.get(spData.size()-1).hashCode()) + "\n", Color.RED);
 //                        sbdev.add(0, spData.get(spData.size() - 1).hashCode(), 0, device.getName());
@@ -533,7 +541,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     if (availableBytes > 0) {
                         buffer = new byte[availableBytes];
                         bytes = InStream.read(buffer);
-                        Log.d(TAG, "Доступно байт: " + String.valueOf(availableBytes) + " Считано байт: " + String.valueOf(bytes) + "\n");
+                        Log.d(LOG_TAG, "Доступно байт: " + String.valueOf(availableBytes) + " Считано байт: " + String.valueOf(bytes) + "\n");
                         hRx.obtainMessage(MESSAGE_READ, bytes, -1, buffer).sendToTarget();
                     } //else SystemClock.sleep(50);
                 } catch (IOException e) {
@@ -577,7 +585,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         for (String entry : stringArray) {
             String[] splitResult = entry.split("\\|", 2);
             //m = new HashMap<UUID, String>();
-//            Log.d(TAG, "*** " + splitResult[0] + " : " + splitResult[1]);
+//            Log.d(LOG_TAG, "*** " + splitResult[0] + " : " + splitResult[1]);
             map.put(UUID.fromString(splitResult[0]), splitResult[1]);
         }
     }
@@ -588,14 +596,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         spannable.setSpan(new ForegroundColorSpan(color), 0, st.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 //        Spanned str = Html.fromHtml("<font color=\"" + color + "\">" + st + "</font>");
         tv.append(spannable);
-        Log.d(TAG, st);
+        Log.d(LOG_TAG, st);
     }
 
     public void addText(TextView tv, String st, int color, IOException e) {
         final Spannable spannable = new SpannableString(st);
         spannable.setSpan(new ForegroundColorSpan(color), 0, st.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         tv.append(spannable);
-        Log.d(TAG, st, e);
+        Log.d(LOG_TAG, st, e);
     }
 
     public String DlgAlert() {
@@ -622,6 +630,29 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             if (obj.hashCode() == hash) return (HashMap <String, Object>) obj;
         }
         return null;
+    }
+
+    private void requestFeature() {
+        try {
+            Field fieldImpl = ActionBarActivity.class.getDeclaredField("mImpl");
+            fieldImpl.setAccessible(true);
+            Object impl = fieldImpl.get(this);
+
+            Class cls = Class.forName("android.support.v7.app.ActionBarActivityDelegate");
+
+            Field fieldHasActionBar = cls.getDeclaredField("mHasActionBar");
+            fieldHasActionBar.setAccessible(true);
+            fieldHasActionBar.setBoolean(impl, true);
+
+        } catch (NoSuchFieldException e) {
+            Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+        } catch (IllegalAccessException e) {
+            Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+        } catch (IllegalArgumentException e) {
+            Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+        } catch (ClassNotFoundException e) {
+            Log.e(LOG_TAG, e.getLocalizedMessage(), e);
+        }
     }
 }
 
